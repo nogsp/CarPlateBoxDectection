@@ -34,10 +34,10 @@ def fftFilter(img):
     magnitude_spectrum = 20*np.log(np.abs(fshift))
     magnitude_spectrum = np.asarray(magnitude_spectrum, dtype=np.uint8)
 
-    #sz = 25
-    #rows, cols = img.shape
-    #crow,ccol = rows//2 , cols//2
-    #fshift[crow-sz:crow+(sz+1), ccol-sz:ccol+(sz+1)] = 0
+    sz = 10
+    rows, cols = img.shape
+    crow,ccol = rows//2 , cols//2
+    fshift[crow-sz:crow+(sz+1), ccol-sz:ccol+(sz+1)] = 0
 
     f_ishift = np.fft.ifftshift(fshift)
     img_back = np.fft.ifft2(f_ishift)
