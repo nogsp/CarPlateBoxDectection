@@ -1,4 +1,4 @@
-# Car Plate Box Dectect
+# Car Plate Box Dectection
 Project developed for the discipline of Signais and systems at UFPE, 
 
 ## Main depedencias:
