@@ -3,11 +3,6 @@ import cv2
 import imutils
 import glob
 import easyocr
-from matplotlib import pyplot as plt
-from numpy.fft import fft
-#from scipy.ndimage.filters import gaussian_filter
-from graham import graham_scan
-from graham import pt
 
 def antiGlimmerFilter(img):
     for i in range(img.shape[0]):
@@ -35,6 +30,7 @@ def fftFilter(img):
     magnitude_spectrum = 20*np.log(np.abs(fshift))
     magnitude_spectrum = np.asarray(magnitude_spectrum, dtype=np.uint8)
 
+    #high pass filter
     sz = 10
     rows, cols = img.shape
     crow,ccol = rows//2 , cols//2
@@ -65,7 +61,7 @@ def findPlate(imgRef, frames):
         for element in ans:
             (_, text, _) = element
             if len(text) > 1:
-                print(text)
+                #print(text)
                 boxWithText.append(f[1])
     
     return boxWithText
@@ -83,41 +79,6 @@ def getcontours(img, img_back, imgRef):
         if((w>(h*0.75))):
             selectedsFrames.append([w*h,[x,y,w,h]])
 
-        '''
-        # approximate the contour
-        peri = cv2.arcLength(c, True)
-        approx = cv2.approxPolyDP(c, 0.018 * peri, True)
-        #print(approx)
-        #contourHull = cv2.convexHull(c)
-        #cv2.drawContours(img, [c], -1, (0, 0, 255), 3)
-        #cv2.drawContours(img, [c], -1, (0, 0, 255), 3)
-        #if(len(approx) == 5 or len(approx) == 4):
-        #    cv2.drawContours(img, [c], -1, (0, 0, 255), 3)
-        lisandra = []
-        for p in approx:
-            lisandra.append(pt(p[0][0], p[0][1]))
-
-        lisandraCopy = lisandra.copy()
-
-        hull = graham_scan(lisandra)
-        allPointsInHull = True
-
-        for p in lisandraCopy:
-            foundInArray = False
-            for q in hull:
-                if(p == q):
-                    foundInArray = True
-
-            if(not foundInArray):
-                allPointsInHull = False
-                break
-
-        if(allPointsInHull):
-            if((len(approx) > 3) and len(approx) < 7):
-                screenCnt = approx
-                cv2.drawContours(img, [approx], -1, (255, 0, 0), 3)
-                #break
-        '''
     selectedsFrames = sorted(selectedsFrames, key=lambda x: x[0])
     screenRect = findPlate(imgRef, selectedsFrames)
 
@@ -140,13 +101,13 @@ def getcontours(img, img_back, imgRef):
     return imgRef, img_back
 
 def someFilters(img):
-        #kernelmatrix = np.ones((3,3),np.float32)/25
-        #img = cv2.filter2D(img, -1, kernelmatrix)
-        #img = cv2.bilateralFilter(img, 15, 40, 20)
-        #img = gaussian_filter(img, sigma=1)
-        #img = cv2.bilateralFilter(img, 13, 15, 15) 
-        #img = cv2.blur(img,(5,5))
-        return img
+    #kernelmatrix = np.ones((3,3),np.float32)/25
+    #img = cv2.filter2D(img, -1, kernelmatrix)
+    #img = cv2.bilateralFilter(img, 15, 40, 20)
+    #img = gaussian_filter(img, sigma=1)
+    #img = cv2.bilateralFilter(img, 13, 15, 15) 
+    #img = cv2.blur(img,(5,5))
+    return img
 
 def main():
     list_images = glob.iglob("images/*")
@@ -187,20 +148,6 @@ def main():
         cv2.waitKey(0)
 
     cv2.destroyAllWindows()
-
-    '''
-    mask = np.zeros(img.shape,np.uint8)
-    new_image = cv2.drawContours(mask,[screenCnt],0,255,-1,)
-    new_image = cv2.bitwise_and(img,img,mask=mask)
-
-    (x, y) = np.where(mask == 255)
-    (topx, topy) = (np.min(x), np.min(y))
-    (bottomx, bottomy) = (np.max(x), np.max(y))
-    Cropped = img[topx:bottomx+1, topy:bottomy+1]
-
-    cv2.imshow('Cropped',Cropped)
-    cv2.waitKey(0)
-    '''
     
 if __name__ == "__main__":
     main()

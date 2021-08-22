@@ -64,7 +64,7 @@ for image_title in list_images:
     edged = cv2.cvtColor(edged,cv2.COLOR_GRAY2RGB)
     img_and_magnitude = np.concatenate((imgBase, edged), axis=1)
 
-    cv2.imshow('image_title', img_and_magnitude)
+    cv2.imshow('image', img_and_magnitude)
     cv2.waitKey(0)
 
 
