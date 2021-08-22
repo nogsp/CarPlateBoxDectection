@@ -4,7 +4,7 @@ import numpy as np
 import cv2 as cv
 
 
-def filter(img):
+def edgeFilter(img):
     ker = np.array([
             [-1, -1, -1],
             [-1, 18, -1],
