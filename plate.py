@@ -9,9 +9,9 @@ from numpy.fft import fft
 from graham import graham_scan
 from graham import pt
 
-def highligthPixels(img):
-    for i in range(512):
-        for j in range(512):
+def antiGlimmerFilter(img):
+    for i in range(img.shape[0]):
+        for j in range(img.shape[1]):
             if(img[i][j] > 128):
                 img[i][j] = max(128, img[i][j] - img[i][j]*0.15)
             else:
@@ -131,16 +131,21 @@ def main():
     for image_title in list_images:
         # Open an treat image ###########
         img = cv2.imread(image_title, cv2.IMREAD_COLOR)
-        img = cv2.resize(img, (512, 512))
+        ########
+        cv2.imshow('original', img)
+        img = imutils.resize(img, width=512)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-        # highlight black and white points
-        img = highligthPixels(img)
+        ########
+        cv2.imshow('grayscale&resize', img)
+        # decreace areas's bright affected by glimmer
+        img = antiGlimmerFilter(img)
+        cv2.imshow('highlight', img)
 
         # sharpFilter using statistical method to sharp image
         img = sharpFilter(img)
         img = sharpFilter(img)
-
+        img = sharpFilter(img)
+        cv2.imshow('sharped', img)
         #img = someFilters(img)
 
         # Using FFT to detect border
