@@ -60,6 +60,15 @@ def getcontours(img, img_back):
     screenCnt = None
 
     for c in contours:
+        x,y,w,h = cv2.boundingRect(c)
+
+        if(w >= h):
+            cv2.rectangle(img, (x,y), (x+w,y+h),(255,0,0),2)
+
+        if((w*h >= 1500 and w*h <= 25000) and (w >= h)):
+            cv2.rectangle(img, (x,y), (x+w,y+h),(0,255,0),2)
+
+        '''
         # approximate the contour
         peri = cv2.arcLength(c, True)
         approx = cv2.approxPolyDP(c, 0.018 * peri, True)
@@ -94,6 +103,7 @@ def getcontours(img, img_back):
                 screenCnt = approx
                 cv2.drawContours(img, [approx], -1, (255, 0, 0), 3)
                 #break
+        '''
 
     if screenCnt is None:
         detected = 0
@@ -128,6 +138,7 @@ def main():
         img = highligthPixels(img)
 
         # sharpFilter using statistical method to sharp image
+        img = sharpFilter(img)
         img = sharpFilter(img)
 
         #img = someFilters(img)

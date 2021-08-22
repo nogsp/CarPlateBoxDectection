@@ -23,14 +23,24 @@ for image_title in list_images:
 
     # loop over contours
     for c in cnts:
+        x,y,w,h = cv2.boundingRect(c)
+
+        if(w >= h):
+            cv2.rectangle(img, (x,y), (x+w,y+h),(255,0,0),2)
+
+        if((w*h >= 1500 and w*h <= 25000) and (w >= h)):
+            cv2.rectangle(img, (x,y), (x+w,y+h),(0,255,0),2)
+        '''
       # approximate the contour
             peri = cv2.arcLength(c, True)
             approx = cv2.approxPolyDP(c, 0.018 * peri, True)
             if len(approx) > 3 and len(approx) < 7:#chooses contours with 4 corners
                     screenCnt = approx
                     break
-                #draws the selected contour on original image        
-    cv2.drawContours(img, [screenCnt], -1, (0, 255, 0), 3)
+                #draws the selected contour on original image     
+        '''   
+
+    #cv2.drawContours(img, [screenCnt], -1, (0, 255, 0), 3)
     cv2.imshow("Final image with plate detected",img)
     cv2.waitKey(0)
 
