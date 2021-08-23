@@ -27,8 +27,8 @@ def sharpFilter(img):
 def fftFilter(img):
     f = np.fft.fft2(img)
     fshift = np.fft.fftshift(f)
-    magnitude_spectrum = 20*np.log(np.abs(fshift))
-    magnitude_spectrum = np.asarray(magnitude_spectrum, dtype=np.uint8)
+    #magnitude_spectrum = 20*np.log(np.abs(fshift))
+    #magnitude_spectrum = np.asarray(magnitude_spectrum, dtype=np.uint8)
 
     #high pass filter
     sz = 10
@@ -112,15 +112,14 @@ def someFilters(img):
 def main():
     list_images = glob.iglob("images/*")
     for image_title in list_images:
-        # Open an treat image ###########
+        # Open an treat image
         img = cv2.imread(image_title, cv2.IMREAD_COLOR)
         #cv2.imshow('Original', img)
         img = imutils.resize(img, width=512)
         imgBase = img.copy()
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        
-        ########
         #cv2.imshow('grayscale&resize', img)
+        
         # decreace areas's bright affected by glimmer
         img = antiGlimmerFilter(img)
         #cv2.imshow('highlight', img)
